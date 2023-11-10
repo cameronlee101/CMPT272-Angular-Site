@@ -1,0 +1,16 @@
+header {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#map {
+    height: 180px;
+}
