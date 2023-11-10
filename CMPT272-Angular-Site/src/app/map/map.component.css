@@ -1,12 +1,9 @@
 .map-container {
-    width: 80vw;
     position: relative;
     margin: 30px;
-}
-
-.map-frame {
     border: 2px solid black;
-    height: 50vh;
+    width: 80vw;
+    height: 60vh;
 }
 
 #map {

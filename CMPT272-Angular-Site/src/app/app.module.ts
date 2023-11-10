@@ -4,15 +4,21 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { MapComponent } from './map/map.component';
 import { NuisanceTableComponent } from './nuisance-table/nuisance-table.component';
+import { AppRoutingModule } from './app-routing.module';
+import { CreateReportPageComponent } from './create-report-page/create-report-page.component';
+import { HomePageComponent } from './home-page/home-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    NuisanceTableComponent
+    NuisanceTableComponent,
+    CreateReportPageComponent,
+    HomePageComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -9,10 +9,12 @@ import * as L from 'leaflet';
 export class MapComponent implements AfterViewInit {
   private map:any;
 
-  private initMap(): void {
+  constructor() { }
+
+  ngAfterViewInit(): void {
     this.map = L.map('map', {
-      center: [ 39.8282, -98.5795 ],
-      zoom: 3
+      center: [ 49.210002318495455, -122.90813212632467 ],
+      zoom: 10
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -22,11 +24,9 @@ export class MapComponent implements AfterViewInit {
     });
 
     tiles.addTo(this.map);
-  }
 
-  constructor() { }
-
-  ngAfterViewInit(): void {
-    this.initMap();
+    
+    var marker = L.marker([49.210002318495455, -122.90813212632467]).addTo(this.map);
+    marker.bindPopup("<b>New Westminster</b><br>10 nuisance reports")
   }
 }
