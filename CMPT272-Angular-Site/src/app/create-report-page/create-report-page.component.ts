@@ -1,12 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-
-interface locationData {
-  name:string,
-  latitude:number,
-  longitude:number,
-  reports:number,
-}
+import { LocationData } from 'app/classes/location-data';
+import { NuisanceReport } from 'app/classes/nuisance-report';
 
 @Component({
   selector: 'app-create-report-page',
@@ -26,11 +21,11 @@ export class CreateReportPageComponent {
 
   errorLabelText:string = '';
 
-  locationList:string[] = ['Vancouver', 'Burnaby', 'New Westminster', 'Richmond', 'Port Moody', 'North Vancouver', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location', 'Location'].sort();
+  locationList:LocationData[] = LocationData.getLocationList()
 
   constructor(private router:Router) {}
 
-  onLocationSelect(event:any) {
+  onLocationSelect(event:any):void {
     if (this.selectedLocation == 'None' || this.selectedLocation == 'New Location') {
       this.locationName = ''
       this.latitude = ''
@@ -38,13 +33,13 @@ export class CreateReportPageComponent {
     }
     else {
       this.locationName = this.selectedLocation
-      this.latitude = '1'
-      this.longitude = '1'
+      this.latitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.latitude.toString()
+      this.longitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.longitude.toString()
     }
   }
 
   // Checks that all inputs are valid
-  onSubmit() {
+  onSubmit():void {
     // Checking fields in reverse order for usability
     this.errorLabelText = ''
 
@@ -79,6 +74,9 @@ export class CreateReportPageComponent {
     else if (this.locationName == 'None' || this.locationName == 'New') {
       this.errorLabelText = 'Error: \'Location Name\' cannot be \'New\' or \'None\''
     }
+    else if (this.selectedLocation == 'New Location' && this.locationList.find(curLocation => {return curLocation.name == this.locationName}) != undefined) {
+      this.errorLabelText = 'Error: Location with specified name already exists'
+    }
 
     // checks location choice
     if (this.selectedLocation == 'None') {
@@ -106,6 +104,11 @@ export class CreateReportPageComponent {
 
     // If no errors, stores the new nuisance report and returns to home page
     if (this.errorLabelText == '') {
+      NuisanceReport.addReport(new NuisanceReport(this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
+      latitudeNum, longitudeNum, new Date()))
+
+      // TODO: store location data if new location, or increment reports if reused location and PUT to server
+
       this.router.navigate(['/'])
     }
   }

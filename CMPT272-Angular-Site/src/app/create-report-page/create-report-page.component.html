@@ -32,9 +32,9 @@
                             <option value="New Location">New Location</option>
                             <option 
                                 *ngFor="let location of locationList"
-                                value="{{location}}"
+                                value="{{ location.name }}"
                             >
-                                {{ location }}
+                                {{ location.name }}
                             </option>
                         </select>
                     </td>

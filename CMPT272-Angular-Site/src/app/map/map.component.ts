@@ -1,4 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
+import { LocationData } from 'app/classes/location-data';
 import * as L from 'leaflet';
 
 @Component({
@@ -8,10 +9,11 @@ import * as L from 'leaflet';
 })
 export class MapComponent implements AfterViewInit {
   private map:any;
+  locationList:LocationData[] = LocationData.getLocationList()
 
   constructor() { }
 
-  ngAfterViewInit(): void {
+  createMap():void {
     this.map = L.map('map', {
       center: [ 49.210002318495455, -122.90813212632467 ],
       zoom: 10
@@ -24,9 +26,18 @@ export class MapComponent implements AfterViewInit {
     });
 
     tiles.addTo(this.map);
+  }
 
+  createNuisanceMarkers():void {
+    for (let location of this.locationList) {
+      let marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
+      marker.bindPopup(`<b>${location.name}</b><br>${location.reports} nuisance reports`)
+    }
     
-    var marker = L.marker([49.210002318495455, -122.90813212632467]).addTo(this.map);
-    marker.bindPopup("<b>New Westminster</b><br>10 nuisance reports")
+  }
+
+  ngAfterViewInit():void {
+    this.createMap()
+    this.createNuisanceMarkers()
   }
 }
