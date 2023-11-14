@@ -7,6 +7,7 @@ import { NuisanceTableComponent } from './nuisance-table/nuisance-table.componen
 import { AppRoutingModule } from './app-routing.module';
 import { CreateReportPageComponent } from './create-report-page/create-report-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { HomePageComponent } from './home-page/home-page.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

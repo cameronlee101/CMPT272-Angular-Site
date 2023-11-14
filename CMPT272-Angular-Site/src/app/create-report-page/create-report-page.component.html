@@ -9,41 +9,62 @@
             <tbody>
                 <tr>
                     <td>Witness' Name</td>
-                    <td><input/></td>
+                    <td><input [(ngModel)]="witnessName" name="witnessName" required/></td>
                 </tr>
                 <tr>
-                    <td>Witness' Phone Number</td>
-                    <td><input/></td>
+                    <td>Witness' Phone Number<br/>Format: XXX-XXX-XXXX<br/>&#40;where X is a number&#41;</td>
+                    <td><input [(ngModel)]="witnessPhoneNumber" name="witnessPhoneNumber"/></td>
                 </tr>
                 <tr>
                     <td>Baddie's Name</td>
-                    <td><input/></td>
+                    <td><input [(ngModel)]="baddieName" name="baddieName"/></td>
+                </tr>
+                <tr>
+                    <td>Select Location</td>
+                    <td>
+                        <select 
+                            name="selectLocation" 
+                            id="selectLocation" 
+                            [(ngModel)]="selectedLocation"
+                            (change)="onLocationSelect($event)" 
+                        >
+                            <option value="None">None</option>
+                            <option value="New Location">New Location</option>
+                            <option 
+                                *ngFor="let location of locationList"
+                                value="{{location}}"
+                            >
+                                {{ location }}
+                            </option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td>Location Name</td>
-                    <td><input/></td>
+                    <td><input [(ngModel)]="locationName" name="locationName" [disabled]="selectedLocation !== 'New Location'"/></td>
                 </tr>
                 <tr>
                     <td>Latitude</td>
-                    <td><input/></td>
+                    <td><input [(ngModel)]="latitude" name="latitutde" [disabled]="selectedLocation !== 'New Location'"/></td>
                 </tr>
                 <tr>
                     <td>Longitude</td>
-                    <td><input/></td>
+                    <td><input [(ngModel)]="longitude" name="longitude" [disabled]="selectedLocation !== 'New Location'"/></td>
                 </tr>
                 <tr>
                     <td>Picture Link &#40;Optional&#41;</td>
-                    <td><input/></td>
+                    <td><input [(ngModel)]="pictureLink" name="pictureLink"/></td>
                 </tr>
                 <tr>
-                    <td>Extra Info</td>
-                    <td><input/></td>
+                    <td>Extra Info &#40;Optional&#41;</td>
+                    <td><input [(ngModel)]="extraInfo" name="extraInfo"/></td>
                 </tr>
             </tbody>
         </table>
+        <p id="errorLabel">{{ errorLabelText }}</p>
     </form>
     <section id="buttonsSection">
         <a routerLink=".."><button class="btn btn-primary">BACK</button></a>
-        <a routerLink=".."><button class="btn btn-primary">SUBMIT</button></a>
+        <button class="btn btn-primary" (click)="onSubmit()">SUBMIT</button>
     </section>
 </main>
