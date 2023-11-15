@@ -1,3 +1,9 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #FAF9F6;
+    height: 100vh;
+}
+
 header {
     display: flex;
     justify-content: center;

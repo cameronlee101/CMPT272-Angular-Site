@@ -1,3 +1,7 @@
+body {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 table {
     text-align: center;
     width: 75vw;
@@ -5,4 +9,13 @@ table {
 td {
     vertical-align: middle;
     height: 50px;
+}
+
+.table-category:hover {
+    cursor: pointer;
+    color: rgb(151, 151, 151);
+}
+
+.sortedBy {
+    text-decoration-line: underline;
 }

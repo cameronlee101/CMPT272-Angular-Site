@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { NuisanceReport } from 'app/classes/nuisance-report';
 
 @Component({
   selector: 'app-home-page',
@@ -7,4 +8,9 @@ import { Component } from '@angular/core';
 })
 export class HomePageComponent {
 
+  constructor() {}
+
+  showMoreInfo(report:NuisanceReport) {
+    console.log(report)
+  }
 }
