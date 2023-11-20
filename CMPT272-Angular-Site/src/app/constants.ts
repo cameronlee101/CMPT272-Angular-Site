@@ -1,0 +1,1 @@
+export const SERVER_COLLECTION_URL = 'https://272.selfip.net/apps/dDJNdv3Srp/collections/'
