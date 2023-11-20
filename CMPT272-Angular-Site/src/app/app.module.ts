@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CreateReportPageComponent } from './create-report-page/create-report-page.component';
 import { HomePageComponent } from './home-page/home-page.component';
 import { FormsModule } from '@angular/forms';
+import { MoreInfoBoxComponent } from './more-info-box/more-info-box.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { FormsModule } from '@angular/forms';
     MapComponent,
     NuisanceTableComponent,
     CreateReportPageComponent,
-    HomePageComponent
+    HomePageComponent,
+    MoreInfoBoxComponent
   ],
   imports: [
     BrowserModule,

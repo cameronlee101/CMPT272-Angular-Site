@@ -5,11 +5,12 @@
     <main>  
         <app-map></app-map>
         <a routerLink="createReportPage"><button class="btn btn-primary">CREATE NUISANCE REPORT</button></a>
-        <figure>
-            <table>
-
-            </table>
-        </figure>
+        <app-more-info-box
+            [report] = 'moreInfoReport'
+            *ngIf="showingMoreInfo"
+            (close)="closeMoreInfo()"
+        >
+        </app-more-info-box>
         <app-nuisance-table
             (moreInfo)="showMoreInfo($event)"
         ></app-nuisance-table> 

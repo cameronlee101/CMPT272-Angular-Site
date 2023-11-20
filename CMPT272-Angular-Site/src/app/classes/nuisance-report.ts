@@ -15,12 +15,12 @@ export class NuisanceReport {
     }
 
     static getReportList():NuisanceReport[] {
-        // TODO: GET from server
+        // TODO: GET from server 
         return [
-            new NuisanceReport('witnessA', 'witnessAPhone', 'Bob the Builder', 'Burnaby', 1.1, 2.2, new Date()),
-            new NuisanceReport('witnessB', 'witnessBPhone', 'Elmo', 'Vancouver', 3.3, 4.4, new Date()),
-            new NuisanceReport('witnessC', 'witnessCPhone', 'Dora the Explorer', 'Surrey', 5.5, 6.6, new Date()),
-            new NuisanceReport('witnessD', 'witnessDPhone', 'Winnie the Pooh', 'Richmond', 7.7, 8.8, new Date()),
+            new NuisanceReport('witnessA', '123-456-7890', 'Bob the Builder', 'Burnaby', 1.1, 2.2, new Date()),
+            new NuisanceReport('witnessB', '778-423-1534', 'Elmo', 'Vancouver', 3.3, 4.4, new Date()),
+            new NuisanceReport('witnessC', '604-645-1275', 'Dora the Explorer', 'Surrey', 5.5, 6.6, new Date()),
+            new NuisanceReport('witnessD', '800-512-7453', 'Winnie the Pooh', 'Richmond', 7.7, 8.8, new Date()),
         ]
     }
 
@@ -30,6 +30,7 @@ export class NuisanceReport {
     }
 
     static getNewID():number {
+        // TODO: GET next ID from server then PUT to update next ID
         return 0
     }
 }
