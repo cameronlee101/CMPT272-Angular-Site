@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocationData } from 'app/classes/location-data';
 import { NuisanceReport } from 'app/classes/nuisance-report';
+import { LocationDataService } from 'app/services/location-data.service';
+import { NuisanceReportService } from 'app/services/nuisance-report.service';
 
 @Component({
   selector: 'app-create-report-page',
@@ -21,9 +23,9 @@ export class CreateReportPageComponent {
 
   errorLabelText:string = '';
 
-  locationList:LocationData[] = LocationData.getLocationList()
+  locationList:LocationData[] = this.lds.getLocationList()
 
-  constructor(private router:Router) {}
+  constructor(private router:Router, private lds:LocationDataService, private nrs:NuisanceReportService) {}
 
   onLocationSelect(event:any):void {
     if (this.selectedLocation == 'None' || this.selectedLocation == 'New Location') {
@@ -104,8 +106,8 @@ export class CreateReportPageComponent {
 
     // If no errors, stores the new nuisance report and returns to home page
     if (this.errorLabelText == '') {
-      NuisanceReport.addReport(new NuisanceReport(this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
-      latitudeNum, longitudeNum, new Date()))
+      this.nrs.addReport(new NuisanceReport(this.nrs, this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
+      latitudeNum, longitudeNum))
 
       // TODO: store location data if new location, or increment reports if reused location and PUT to server
 

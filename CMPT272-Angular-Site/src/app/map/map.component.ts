@@ -1,5 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { LocationData } from 'app/classes/location-data';
+import { LocationDataService } from 'app/services/location-data.service';
 import * as L from 'leaflet';
 
 @Component({
@@ -9,9 +10,9 @@ import * as L from 'leaflet';
 })
 export class MapComponent implements AfterViewInit {
   private map:any;
-  locationList:LocationData[] = LocationData.getLocationList()
+  locationList:LocationData[] = this.lds.getLocationList()
 
-  constructor() { }
+  constructor(private lds:LocationDataService) { }
 
   createMap():void {
     this.map = L.map('map', {
