@@ -6,15 +6,17 @@ export enum Status {
 }
 
 export class NuisanceReport {
-    public ID:number
+    public ID:number = 0
     public status:Status
     public timeReported:Date
 
-    constructor(private nrs:NuisanceReportService, public witnessName:string, public witnessPhoneNumber:string, public baddieName:string,
+    constructor(nrs:NuisanceReportService, public witnessName:string, public witnessPhoneNumber:string, public baddieName:string,
                 public locationName:string, public latitude:number, public longitude:number,
                 public picLink?:string, public extraInfo?:string) {
         this.timeReported = new Date()
-        this.ID = nrs.getNewID()
+        nrs.getNewID().subscribe((newID:number) => {
+            this.ID = newID
+        })
         this.status = Status.Open
     }
 }

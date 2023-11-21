@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { LocationData } from '../classes/location-data';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationDataService {
 
-  constructor() { }
+  constructor(private http:HttpClient) { }
 
   getLocationList():LocationData[] {
     // TODO: GET from server

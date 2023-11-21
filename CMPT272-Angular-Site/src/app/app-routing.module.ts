@@ -7,7 +7,6 @@ import { HomePageComponent } from './home-page/home-page.component';
 const routes: Routes = [
   { path: '', component: HomePageComponent },
   { path: 'createReportPage', component: CreateReportPageComponent },
-  { path: '**', component: HomePageComponent },
 ];
 
 @NgModule({

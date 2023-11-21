@@ -106,12 +106,14 @@ export class CreateReportPageComponent {
 
     // If no errors, stores the new nuisance report and returns to home page
     if (this.errorLabelText == '') {
-      this.nrs.addReport(new NuisanceReport(this.nrs, this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
-      latitudeNum, longitudeNum))
+      let newReport = new NuisanceReport(this.nrs, this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
+        latitudeNum, longitudeNum) 
+
+      this.nrs.addReport(newReport)
 
       // TODO: store location data if new location, or increment reports if reused location and PUT to server
 
-      this.router.navigate(['/'])
+      // this.router.navigate(['/'])
     }
   }
 }

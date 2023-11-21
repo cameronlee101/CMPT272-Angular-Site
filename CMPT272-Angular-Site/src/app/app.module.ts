@@ -9,6 +9,7 @@ import { CreateReportPageComponent } from './create-report-page/create-report-pa
 import { HomePageComponent } from './home-page/home-page.component';
 import { FormsModule } from '@angular/forms';
 import { MoreInfoBoxComponent } from './more-info-box/more-info-box.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { MoreInfoBoxComponent } from './more-info-box/more-info-box.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
