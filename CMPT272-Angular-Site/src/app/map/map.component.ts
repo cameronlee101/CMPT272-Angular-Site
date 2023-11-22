@@ -26,9 +26,9 @@ Marker.prototype.options.icon = iconDefault;
 })
 export class MapComponent implements AfterViewInit {
   private map:any;
-  locationList:LocationData[] = this.lds.getLocationList()
+  locationList:LocationData[] = []
 
-  constructor(private lds:LocationDataService) { }
+  constructor(private lds:LocationDataService) {}
 
   createMap():void {
     this.map = L.map('map', {
@@ -54,6 +54,10 @@ export class MapComponent implements AfterViewInit {
 
   ngAfterViewInit():void {
     this.createMap()
-    this.createNuisanceMarkers()
+
+    this.lds.getLocationList().subscribe((list:LocationData[]) => {
+      this.locationList = list
+      this.createNuisanceMarkers()
+    })
   }
 }

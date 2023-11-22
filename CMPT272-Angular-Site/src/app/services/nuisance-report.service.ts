@@ -15,7 +15,7 @@ interface IDTracker {
   }
 }
 
-interface Reports {
+interface ReportResponse {
   key:string
   data: {
     ID:number
@@ -47,7 +47,7 @@ export class NuisanceReport {
   } 
 
   // TODO: refactor?
-  static ReportsToNuisanceReport(report:Reports):NuisanceReport {
+  static ReportResponseToNuisanceReport(report:ReportResponse):NuisanceReport {
     let ret:any = report.data
     ret.timeReported = new Date(ret.timeReported)
     return ret as NuisanceReport
@@ -79,12 +79,12 @@ export class NuisanceReportService {
   getReportList():Observable<NuisanceReport[]> {
     // GET list of nuisance reports from server
     // NOTE: calling function will need to .subscribe() to get value
-    return this.http.get<Reports[]>(SERVER_COLLECTION_URL + '/reports/documents')
+    return this.http.get<ReportResponse[]>(SERVER_COLLECTION_URL + '/reports/documents')
       .pipe(catchError(this.handleError))
-      .pipe(map((response:Reports[]) => {
+      .pipe(map((response:ReportResponse[]) => {
         let reportList:NuisanceReport[] = []
-        for (let report of response) {
-          reportList.push(NuisanceReport.ReportsToNuisanceReport(report))
+        for (let item of response) {
+          reportList.push(NuisanceReport.ReportResponseToNuisanceReport(item))
         }
         return reportList
       }))

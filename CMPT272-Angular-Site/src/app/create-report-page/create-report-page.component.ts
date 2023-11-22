@@ -21,9 +21,13 @@ export class CreateReportPageComponent {
 
   errorLabelText:string = '';
 
-  locationList:LocationData[] = this.lds.getLocationList()
+  locationList:LocationData[] = []
 
-  constructor(private router:Router, private lds:LocationDataService, private nrs:NuisanceReportService) {}
+  constructor(private router:Router, private lds:LocationDataService, private nrs:NuisanceReportService) {
+    lds.getLocationList().subscribe((list:LocationData[]) => {
+      this.locationList = list
+    })
+  }
 
   onLocationSelect(event:any):void {
     if (this.selectedLocation == 'None' || this.selectedLocation == 'New Location') {
@@ -105,11 +109,18 @@ export class CreateReportPageComponent {
     // If no errors, stores the new nuisance report and returns to home page
     if (this.errorLabelText == '') {
       let newReport = new NuisanceReport(this.nrs, this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
-        latitudeNum, longitudeNum) 
-
+        latitudeNum, longitudeNum, this.pictureLink, this.extraInfo) 
       this.nrs.addReport(newReport)
 
-      // TODO: store location data if new location, or increment reports if reused location and PUT to server
+      // TODO: stores location data if new location, or increment reports if reused location
+      let matchingLocation = this.locationList.filter((item) => { return item.name == this.locationName; })
+      if (matchingLocation.length == 0) {
+        this.lds.addLocation(this.locationName, latitudeNum, longitudeNum)
+      }
+      else {
+        this.lds.incrementReportCount(matchingLocation[0])
+      }
+      
 
       this.router.navigate(['/'])
     }

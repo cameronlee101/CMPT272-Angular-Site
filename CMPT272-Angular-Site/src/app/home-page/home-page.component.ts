@@ -13,7 +13,6 @@ export class HomePageComponent {
   constructor() {}
 
   showMoreInfo(report:NuisanceReport) {
-    console.log(report)
     this.moreInfoReport = report
     this.showingMoreInfo = true
   }

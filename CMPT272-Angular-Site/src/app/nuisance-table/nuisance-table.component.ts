@@ -16,28 +16,29 @@ export class NuisanceTableComponent {
     nrs.getReportList().subscribe((list:NuisanceReport[]) => {
       this.reports = list
       this.sortByLocation()
+      this.cdr.detectChanges()
     })
   }
 
   sortByLocation() {
     this.reports = this.reports.sort((a, b) => a.locationName.localeCompare(b.locationName))
     this.currentSortColumn = 'location'
-    this.cdr.detectChanges();
+    this.cdr.detectChanges()
   }
   sortByBaddieName() {
     this.reports = this.reports.sort((a, b) => a.baddieName.localeCompare(b.baddieName))
     this.currentSortColumn = 'baddieName'
-    this.cdr.detectChanges();
+    this.cdr.detectChanges()
   }
   sortByDate() {
     this.reports = this.reports.sort((a, b) => a.timeReported.getTime() - b.timeReported.getTime())
     this.currentSortColumn = 'date'
-    this.cdr.detectChanges();
+    this.cdr.detectChanges()
   }
   sortByStatus() {
     this.reports = this.reports.sort((a, b) => a.status.localeCompare(b.status))
     this.currentSortColumn = 'status'
-    this.cdr.detectChanges();
+    this.cdr.detectChanges()
   }
 
   showMoreInfo(report:NuisanceReport) {
