@@ -1,6 +1,18 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output, AfterViewInit } from '@angular/core';
 import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-report.service';
 
+export enum SortOrder {
+  locationDesc = 'locationDesc',
+  locationAsc = 'locationAsc',
+  baddieNameDesc = 'baddieNameDesc',
+  baddieNameAsc = 'baddieNameAsc',
+  dateDesc = 'dateDesc',
+  dateAsc = 'dateAsc',
+  statusDesc = 'statusDesc',
+  statusAsc = 'statusAsc',
+  none = 'none',
+}
+
 @Component({
   selector: 'app-nuisance-table',
   templateUrl: './nuisance-table.component.html',
@@ -9,8 +21,7 @@ import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-rep
 export class NuisanceTableComponent {
   reports:NuisanceReport[] = []
   @Output() moreInfo = new EventEmitter()
-
-  currentSortColumn:string = ''
+  currentSortColumn:SortOrder = SortOrder.none;
 
   constructor(private cdr: ChangeDetectorRef, private nrs:NuisanceReportService) {
     nrs.getReportList().subscribe((list:NuisanceReport[]) => {
@@ -21,23 +32,47 @@ export class NuisanceTableComponent {
   }
 
   sortByLocation() {
-    this.reports = this.reports.sort((a, b) => a.locationName.localeCompare(b.locationName))
-    this.currentSortColumn = 'location'
+    if (this.currentSortColumn == SortOrder.locationDesc) {
+      this.reports = this.reports.sort((a, b) => b.locationName.localeCompare(a.locationName))
+      this.currentSortColumn = SortOrder.locationAsc
+    }
+    else {
+      this.reports = this.reports.sort((a, b) => a.locationName.localeCompare(b.locationName))
+      this.currentSortColumn = SortOrder.locationDesc
+    }
     this.cdr.detectChanges()
   }
   sortByBaddieName() {
-    this.reports = this.reports.sort((a, b) => a.baddieName.localeCompare(b.baddieName))
-    this.currentSortColumn = 'baddieName'
+    if (this.currentSortColumn == SortOrder.baddieNameDesc) {
+      this.reports = this.reports.sort((a, b) => b.baddieName.localeCompare(a.baddieName))
+      this.currentSortColumn = SortOrder.baddieNameAsc
+    }
+    else {
+      this.reports = this.reports.sort((a, b) => a.baddieName.localeCompare(b.baddieName))
+      this.currentSortColumn = SortOrder.baddieNameDesc
+    }
     this.cdr.detectChanges()
   }
   sortByDate() {
-    this.reports = this.reports.sort((a, b) => a.timeReported.getTime() - b.timeReported.getTime())
-    this.currentSortColumn = 'date'
+    if (this.currentSortColumn == SortOrder.dateDesc) {
+      this.reports = this.reports.sort((a, b) => b.timeReported.getTime() - a.timeReported.getTime())
+      this.currentSortColumn = SortOrder.dateAsc
+    }
+    else {
+      this.reports = this.reports.sort((a, b) => a.timeReported.getTime() - b.timeReported.getTime())
+      this.currentSortColumn = SortOrder.dateDesc
+    }
     this.cdr.detectChanges()
   }
   sortByStatus() {
-    this.reports = this.reports.sort((a, b) => a.status.localeCompare(b.status))
-    this.currentSortColumn = 'status'
+    if (this.currentSortColumn == SortOrder.statusDesc) {
+      this.reports = this.reports.sort((a, b) => b.status.localeCompare(a.status))
+      this.currentSortColumn = SortOrder.statusAsc
+    }
+    else {
+      this.reports = this.reports.sort((a, b) => a.status.localeCompare(b.status))
+      this.currentSortColumn = SortOrder.statusDesc   
+    }
     this.cdr.detectChanges()
   }
 

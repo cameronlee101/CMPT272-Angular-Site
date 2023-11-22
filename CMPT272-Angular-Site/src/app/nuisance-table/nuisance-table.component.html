@@ -2,10 +2,34 @@
     <table class="table table-striped table-bordered table-light">
         <thead class="thead-light">
             <tr>
-                <th (click)="sortByLocation()" class="table-category" [class.sortedBy]="currentSortColumn == 'location'">Location</th>
-                <th (click)="sortByBaddieName()" class="table-category" [class.sortedBy]="currentSortColumn == 'baddieName'">Baddie's Name</th>
-                <th (click)="sortByDate()" class="table-category" [class.sortedBy]="currentSortColumn == 'date'">Time Reported</th>
-                <th (click)="sortByStatus()" class="table-category" [class.sortedBy]="currentSortColumn == 'status'">Status</th>
+                <th 
+                    (click)="sortByLocation()" 
+                    class="table-category" 
+                    [class.sortedBy]="currentSortColumn.valueOf() == 'locationDesc' || currentSortColumn.valueOf() == 'locationAsc'"
+                >
+                    Location
+                </th>
+                <th 
+                    (click)="sortByBaddieName()" 
+                    class="table-category" 
+                    [class.sortedBy]="currentSortColumn == 'baddieNameDesc' || currentSortColumn == 'baddieNameAsc'"
+                >
+                    Baddie's Name
+                </th>
+                <th 
+                    (click)="sortByDate()" 
+                    class="table-category" 
+                    [class.sortedBy]="currentSortColumn == 'dateDesc' || currentSortColumn == 'dateAsc'"                
+                >
+                    Time Reported
+                </th>
+                <th 
+                    (click)="sortByStatus()" 
+                    class="table-category" 
+                    [class.sortedBy]="currentSortColumn == 'statusDesc' || currentSortColumn == 'statusAsc'"                
+                >
+                    Status
+                </th>
                 <th> </th>
                 <th> </th>
             </tr>
@@ -16,7 +40,7 @@
             >
                 <td>{{ report.locationName }}</td>
                 <td>{{ report.baddieName }}</td>
-                <td>{{ report.timeReported }}</td>
+                <td>{{ report.timeReported.toLocaleDateString() }} {{ report.timeReported.toLocaleTimeString() }}</td>
                 <td>{{ report.status }}</td>
                 <td>
                     <button 

@@ -59,6 +59,24 @@ export class LocationDataService {
       .subscribe()
   }
 
+  decrementReportCount(location:LocationData) {
+    // PUT to server the location with updated report count
+    if (location.reports > 0) {
+      location.reports -= 1
+      let putBody:LocationResponse = {
+        key: location.name,
+        data: location
+      }
+
+      this.http.put(SERVER_COLLECTION_URL + 'locations/documents/' + location.name + '/', putBody)
+        .pipe(catchError(this.handleError))
+        .subscribe()
+    }
+    else {
+      console.error('Attempted to decrement report count of location that is already at 0 reports')
+    }
+  }
+
   addLocation(name:string, latitude:number, longitude:number) {
     // POST to server the new location
     let postBody:LocationResponse = {
