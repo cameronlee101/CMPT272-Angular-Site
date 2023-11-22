@@ -1,13 +1,50 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { NuisanceReport } from 'app/classes/nuisance-report';
 import { SERVER_COLLECTION_URL } from 'app/constants';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
+
+export enum Status {
+  Open = 'Open',
+  Resolved = 'Resolved',
+}
 
 interface IDTracker {
   key:string
   data: {
-    ID: number
+    ID:number
+  }
+}
+
+interface Reports {
+  key:string
+  data:NuisanceReport
+  // data: {
+  //   ID:number
+  //   nrs:NuisanceReportService, 
+  //   witnessName:string, 
+  //   witnessPhoneNumber:string, 
+  //   baddieName:string,
+  //   locationName:string, 
+  //   latitude:number, 
+  //   longitude:number,
+  //   status:Status,
+  //   timeReported:string,
+  //   picLink?:string, 
+  //   extraInfo?:string
+  // }
+}
+
+export class NuisanceReport {
+  public ID:number
+  public status:Status
+  public timeReported:Date
+
+  constructor(nrs:NuisanceReportService, public witnessName:string, public witnessPhoneNumber:string, public baddieName:string,
+              public locationName:string, public latitude:number, public longitude:number,
+              public picLink?:string, public extraInfo?:string) {
+      this.timeReported = new Date()
+      this.ID = nrs.getNewID()
+      this.status = Status.Open
   }
 }
 
@@ -15,17 +52,36 @@ interface IDTracker {
   providedIn: 'root'
 })
 export class NuisanceReportService {
+  nextID:number = 0;
+  IDTrackerUpdateBody:IDTracker = {
+    key: '',
+    data: {
+      ID: 0
+    }
+  };
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) { 
+    // GET next ID from server
+    this.http.get<IDTracker>(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID')
+      .pipe(catchError(this.handleError))
+      .subscribe((response:IDTracker) => {
+        this.IDTrackerUpdateBody = response
+        this.nextID = response.data.ID
+      })
+  }
 
-  getReportList():NuisanceReport[] {
-    // TODO: GET from server 
-    return [
-      new NuisanceReport(this, 'witnessA', '123-456-7890', 'Bob the Builder', 'Burnaby', 1.1, 2.2),
-      new NuisanceReport(this, 'witnessB', '778-423-1534', 'Elmo', 'Vancouver', 3.3, 4.4),
-      new NuisanceReport(this, 'witnessC', '604-645-1275', 'Dora the Explorer', 'Surrey', 5.5, 6.6),
-      new NuisanceReport(this, 'witnessD', '800-512-7453', 'Winnie the Pooh', 'Richmond', 7.7, 8.8),
-    ]
+  getReportList():Observable<NuisanceReport[]> {
+    // GET list of nuisance reports from server
+    // NOTE: calling function will need to .subscribe() to get value
+    return this.http.get<Reports[]>(SERVER_COLLECTION_URL + '/reports/documents')
+      .pipe(catchError(this.handleError))
+      .pipe(map((response:Reports[]) => {
+        let reportList:NuisanceReport[] = []
+        for (let report of response) {
+          reportList.push(report.data)
+        }
+        return reportList
+      }))
   }
 
   addReport(report:NuisanceReport) {
@@ -34,29 +90,21 @@ export class NuisanceReportService {
  
     this.http.post(SERVER_COLLECTION_URL + 'reports/documents/', postBody)
       .pipe(catchError(this.handleError))
-      .subscribe(() => {console.log('test')})
+      .subscribe()
   }
   
-  getNewID(): Observable<number> {
-    // GET next ID from server
-    return this.http.get<IDTracker>(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID')
-      .pipe(
-        catchError(this.handleError),
-        map((response: IDTracker) => {
-          const newID = Number(response.data.ID);
-          let putBody = response
-          putBody.data.ID = newID + 1
+  getNewID(): number {
+    this.nextID += 1
+    this.IDTrackerUpdateBody.data.ID = this.nextID
 
-          // PUT to update next ID
-          this.http.put(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID', putBody)
-            .pipe(catchError(this.handleError))
-            .subscribe(() => {});
-  
-          return newID;
-        })
-      );
+    this.http.put(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID', this.IDTrackerUpdateBody)
+      .pipe(catchError(this.handleError))
+      .subscribe(() => {});
+
+    return this.nextID - 1;
   }
   
+  // Adapted from https://angular.io/guide/http-handle-request-errors
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.

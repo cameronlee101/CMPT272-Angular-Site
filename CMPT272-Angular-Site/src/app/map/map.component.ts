@@ -1,6 +1,5 @@
 import { Component, AfterViewInit } from '@angular/core';
-import { LocationData } from 'app/classes/location-data';
-import { LocationDataService } from 'app/services/location-data.service';
+import { LocationDataService, LocationData } from 'app/services/location-data.service';
 import * as L from 'leaflet';
 
 @Component({
@@ -34,7 +33,6 @@ export class MapComponent implements AfterViewInit {
       let marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
       marker.bindPopup(`<b>${location.name}</b><br>${location.reports} nuisance reports`)
     }
-    
   }
 
   ngAfterViewInit():void {

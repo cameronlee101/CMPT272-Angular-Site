@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
-import { LocationData } from '../classes/location-data';
 import { HttpClient } from '@angular/common/http';
+
+export class LocationData {
+  public reports:number = 1
+  constructor(public name:string, public latitude:number, public longitude:number) {
+
+  }
+}
 
 @Injectable({
   providedIn: 'root'

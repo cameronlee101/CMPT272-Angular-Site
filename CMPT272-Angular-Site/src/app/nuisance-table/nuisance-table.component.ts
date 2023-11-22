@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, EventEmitter, Output, AfterViewInit } from '@angular/core';
-import { NuisanceReport, Status } from 'app/classes/nuisance-report';
-import { NuisanceReportService } from 'app/services/nuisance-report.service';
+import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-report.service';
 
 @Component({
   selector: 'app-nuisance-table',
@@ -8,12 +7,16 @@ import { NuisanceReportService } from 'app/services/nuisance-report.service';
   styleUrl: './nuisance-table.component.css'
 })
 export class NuisanceTableComponent implements AfterViewInit{
-  reports:NuisanceReport[] = this.nrs.getReportList()
+  reports:NuisanceReport[] = []
   @Output() moreInfo = new EventEmitter()
 
   currentSortColumn:string = ''
 
-  constructor(private cdr: ChangeDetectorRef, private nrs:NuisanceReportService) {}
+  constructor(private cdr: ChangeDetectorRef, private nrs:NuisanceReportService) {
+    nrs.getReportList().subscribe((list:NuisanceReport[]) => {
+      this.reports = list
+    })
+  }
 
   ngAfterViewInit():void {
     this.sortByLocation()

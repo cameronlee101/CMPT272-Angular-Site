@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { NuisanceReport } from 'app/classes/nuisance-report';
+import { NuisanceReport } from 'app/services/nuisance-report.service';
 
 @Component({
   selector: 'app-more-info-box',

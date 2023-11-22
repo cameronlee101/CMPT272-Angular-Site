@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NuisanceReport, Status } from 'app/classes/nuisance-report';
+import { NuisanceReport } from 'app/services/nuisance-report.service';
 
 @Component({
   selector: 'app-home-page',

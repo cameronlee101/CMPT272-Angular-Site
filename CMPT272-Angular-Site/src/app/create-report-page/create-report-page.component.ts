@@ -1,9 +1,7 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocationData } from 'app/classes/location-data';
-import { NuisanceReport } from 'app/classes/nuisance-report';
-import { LocationDataService } from 'app/services/location-data.service';
-import { NuisanceReportService } from 'app/services/nuisance-report.service';
+import { LocationDataService, LocationData } from 'app/services/location-data.service';
+import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-report.service';
 
 @Component({
   selector: 'app-create-report-page',
@@ -113,7 +111,7 @@ export class CreateReportPageComponent {
 
       // TODO: store location data if new location, or increment reports if reused location and PUT to server
 
-      // this.router.navigate(['/'])
+      this.router.navigate(['/'])
     }
   }
 }
