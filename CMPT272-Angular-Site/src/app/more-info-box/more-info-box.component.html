@@ -1,6 +1,6 @@
 <body>
     <div>    
-        <p></p>
+        <p *ngIf="report?.picLink != ''"><img src={{report?.picLink}}></p>
         <p><span style="font-weight: bold;">Report ID: </span>{{report?.ID}}</p>
         <p><span style="font-weight: bold;">Baddie's Name: </span>{{report?.baddieName}}</p>
         <p><span style="font-weight: bold;">Reported By: </span>{{report?.witnessName}} ({{report?.witnessPhoneNumber}})</p>

@@ -46,6 +46,6 @@ export class NuisanceTableComponent {
   }
 
   deleteReport(report:NuisanceReport) {
-    console.log(report)
+    confirm('Are you sure you want to delete the nuisance report for ' + report.baddieName + '?')
   }
 }

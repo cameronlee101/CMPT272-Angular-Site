@@ -56,7 +56,7 @@ export class MapComponent implements AfterViewInit {
     this.createMap()
 
     this.lds.getLocationList().subscribe((list:LocationData[]) => {
-      this.locationList = list
+      this.locationList = list.filter((location) => { return location.reports > 0; })
       this.createNuisanceMarkers()
     })
   }
