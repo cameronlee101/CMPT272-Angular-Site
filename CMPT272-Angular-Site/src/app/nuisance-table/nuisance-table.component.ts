@@ -6,7 +6,7 @@ import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-rep
   templateUrl: './nuisance-table.component.html',
   styleUrl: './nuisance-table.component.css'
 })
-export class NuisanceTableComponent implements AfterViewInit{
+export class NuisanceTableComponent {
   reports:NuisanceReport[] = []
   @Output() moreInfo = new EventEmitter()
 
@@ -15,11 +15,8 @@ export class NuisanceTableComponent implements AfterViewInit{
   constructor(private cdr: ChangeDetectorRef, private nrs:NuisanceReportService) {
     nrs.getReportList().subscribe((list:NuisanceReport[]) => {
       this.reports = list
+      this.sortByLocation()
     })
-  }
-
-  ngAfterViewInit():void {
-    this.sortByLocation()
   }
 
   sortByLocation() {

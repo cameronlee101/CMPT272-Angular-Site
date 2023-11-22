@@ -17,21 +17,20 @@ interface IDTracker {
 
 interface Reports {
   key:string
-  data:NuisanceReport
-  // data: {
-  //   ID:number
-  //   nrs:NuisanceReportService, 
-  //   witnessName:string, 
-  //   witnessPhoneNumber:string, 
-  //   baddieName:string,
-  //   locationName:string, 
-  //   latitude:number, 
-  //   longitude:number,
-  //   status:Status,
-  //   timeReported:string,
-  //   picLink?:string, 
-  //   extraInfo?:string
-  // }
+  data: {
+    ID:number
+    nrs:NuisanceReportService, 
+    witnessName:string, 
+    witnessPhoneNumber:string, 
+    baddieName:string,
+    locationName:string, 
+    latitude:number, 
+    longitude:number,
+    status:Status,
+    timeReported:string,
+    picLink?:string, 
+    extraInfo?:string
+  }
 }
 
 export class NuisanceReport {
@@ -45,6 +44,13 @@ export class NuisanceReport {
       this.timeReported = new Date()
       this.ID = nrs.getNewID()
       this.status = Status.Open
+  } 
+
+  // TODO: refactor?
+  static ReportsToNuisanceReport(report:Reports):NuisanceReport {
+    let ret:any = report.data
+    ret.timeReported = new Date(ret.timeReported)
+    return ret as NuisanceReport
   }
 }
 
@@ -78,7 +84,7 @@ export class NuisanceReportService {
       .pipe(map((response:Reports[]) => {
         let reportList:NuisanceReport[] = []
         for (let report of response) {
-          reportList.push(report.data)
+          reportList.push(NuisanceReport.ReportsToNuisanceReport(report))
         }
         return reportList
       }))
