@@ -13,6 +13,8 @@ export class LoginPageComponent {
   reportID:number
 
   constructor(private activatedRoute: ActivatedRoute, private router:Router) {
+    this.reportID = activatedRoute.snapshot.params['ID']
+
     let formControls = {
       password: new FormControl('', [
         Validators.required,
@@ -20,9 +22,6 @@ export class LoginPageComponent {
       ])
     }
     this.form = new FormGroup(formControls)
-
-    this.reportID = activatedRoute.snapshot.params['ID']
-    console.log(this.reportID)
   }
 
   validPasswordValidator(control:FormControl) {

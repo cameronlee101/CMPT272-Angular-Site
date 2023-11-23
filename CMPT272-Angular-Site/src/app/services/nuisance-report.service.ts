@@ -67,7 +67,7 @@ export class NuisanceReportService {
   };
 
   constructor(private http:HttpClient) { 
-    // GET next ID from server
+    // GET next ID from server and store it in this service
     this.http.get<IDTracker>(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID')
       .pipe(catchError(this.handleError))
       .subscribe((response:IDTracker) => {
@@ -76,9 +76,31 @@ export class NuisanceReportService {
       })
   }
 
+  // POST to server the new report
+  addReport(report:NuisanceReport) {
+    let postBody = {key: report.ID, data: report}
+ 
+    this.http.post(SERVER_COLLECTION_URL + 'reports/documents/', postBody)
+      .pipe(catchError(this.handleError))
+      .subscribe()
+  }
+  
+  // GET the next report ID to use from the server
+  getNewID(): number {
+    this.nextID += 1
+    this.IDTrackerUpdateBody.data.ID = this.nextID
+
+    this.http.put(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID', this.IDTrackerUpdateBody)
+      .pipe(catchError(this.handleError))
+      .subscribe(() => {});
+
+    return this.nextID - 1;
+  }
+
+  // GET list of nuisance reports from server
+  // NOTE: calling function will need to .subscribe() to get value
   getReportList():Observable<NuisanceReport[]> {
-    // GET list of nuisance reports from server
-    // NOTE: calling function will need to .subscribe() to get value
+    
     return this.http.get<ReportResponse[]>(SERVER_COLLECTION_URL + '/reports/documents')
       .pipe(catchError(this.handleError))
       .pipe(map((response:ReportResponse[]) => {
@@ -90,24 +112,21 @@ export class NuisanceReportService {
       }))
   }
 
-  addReport(report:NuisanceReport) {
-    // POST to server the new report
-    let postBody = {key: report.ID, data: report}
- 
-    this.http.post(SERVER_COLLECTION_URL + 'reports/documents/', postBody)
+  // GET a nuisance report from the server given a reportID
+  getReport(reportID:number):Observable<NuisanceReport> {
+    return this.http.get<ReportResponse>(SERVER_COLLECTION_URL + '/reports/documents/' + reportID)
       .pipe(catchError(this.handleError))
-      .subscribe()
+      .pipe(map((response:ReportResponse) => {
+        return NuisanceReport.ReportResponseToNuisanceReport(response)
+      }))
   }
-  
-  getNewID(): number {
-    this.nextID += 1
-    this.IDTrackerUpdateBody.data.ID = this.nextID
 
-    this.http.put(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID', this.IDTrackerUpdateBody)
-      .pipe(catchError(this.handleError))
-      .subscribe(() => {});
+  modifyReport(reportID:number, body:NuisanceReport) {
+    // TODO: PUT to server
+  }
 
-    return this.nextID - 1;
+  deleteReport(reportID:number) {
+    // TODO: DELETE report from server and decrement location report count
   }
   
   // Adapted from https://angular.io/guide/http-handle-request-errors
