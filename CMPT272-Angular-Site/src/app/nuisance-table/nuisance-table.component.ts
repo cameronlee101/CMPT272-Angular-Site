@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Output, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
+import { Router } from '@angular/router';
 import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-report.service';
 
 export enum SortOrder {
@@ -16,14 +17,14 @@ export enum SortOrder {
 @Component({
   selector: 'app-nuisance-table',
   templateUrl: './nuisance-table.component.html',
-  styleUrl: './nuisance-table.component.css'
+  styleUrl: './nuisance-table.component.css',
 })
 export class NuisanceTableComponent {
   reports:NuisanceReport[] = []
   @Output() moreInfo = new EventEmitter()
   currentSortColumn:SortOrder = SortOrder.none;
 
-  constructor(private cdr: ChangeDetectorRef, private nrs:NuisanceReportService) {
+  constructor(private cdr: ChangeDetectorRef, private nrs:NuisanceReportService, private router:Router) {
     nrs.getReportList().subscribe((list:NuisanceReport[]) => {
       this.reports = list
       this.sortByLocation()
@@ -80,7 +81,7 @@ export class NuisanceTableComponent {
     this.moreInfo.emit(report)
   }
 
-  deleteReport(report:NuisanceReport) {
-    confirm('Are you sure you want to delete the nuisance report for ' + report.baddieName + '?')
+  modifyReport(report:NuisanceReport) {
+    this.router.navigate(['/login', report.ID]) 
   }
 }

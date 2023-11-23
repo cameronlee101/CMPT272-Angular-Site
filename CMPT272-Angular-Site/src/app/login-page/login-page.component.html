@@ -1,0 +1,40 @@
+<body>
+    <header>
+        <h1>
+            Please Enter Your Password To Continue
+        </h1>
+    </header>
+    <main>
+        <form
+            [formGroup]="form"
+            (ngSubmit)="onSubmit(form.value)"
+        >   
+            <div>
+                <label for="password">Password  &nbsp;</label>
+                <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    formControlName="password"
+                >
+            </div>
+            
+            <div>
+                <button 
+                    type="button" 
+                    class="btn btn-outline-secondary"
+                    routerLink="/"
+                >
+                    BACK
+                </button>
+                <button 
+                    class="btn btn-outline-primary"
+                    [disabled]="!form.valid"
+                >
+                    SUBMIT
+                </button>
+            </div>
+        </form>
+    </main>
+</body>
+

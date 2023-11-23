@@ -5,7 +5,7 @@
         <p><span style="font-weight: bold;">Baddie's Name: </span>{{report?.baddieName}}</p>
         <p><span style="font-weight: bold;">Reported By: </span>{{report?.witnessName}} ({{report?.witnessPhoneNumber}})</p>
         <p><span style="font-weight: bold;">Reported At: </span>{{report?.timeReported?.toLocaleString()}}</p>
-        <p><span style="font-weight: bold;">Status: </span>{{report?.status}}  <a href="/">(change)</a></p>
+        <p><span style="font-weight: bold;">Status: </span>{{report?.status}}
         <p><span style="font-weight: bold;">Extra Info: </span>{{report?.extraInfo}}</p>
         <button class="btn btn-primary" (click)="closeMoreInfo()">Close</button>
     </div> 
