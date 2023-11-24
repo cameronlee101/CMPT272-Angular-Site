@@ -76,10 +76,13 @@ export class CreateReportPageComponent {
       this.errorLabelText = 'Error: \'Location Name\' cannot be empty'
     }
     else if (this.locationName == 'None' || this.locationName == 'New') {
-      this.errorLabelText = 'Error: \'Location Name\' cannot be \'New\' or \'None\''
+      this.errorLabelText = 'Error: \'Location Name\' cannot be \'None\''
     }
     else if (this.selectedLocation == 'New Location' && this.locationList.find(curLocation => {return curLocation.name == this.locationName}) != undefined) {
       this.errorLabelText = 'Error: Location with specified name already exists'
+    }
+    else if (!/^[a-zA-Z0-9_\-]+$/.test(this.locationName)) {
+      this.errorLabelText = 'Error: \'Location Name\' can only contain letters, numbers, underscores, or hyphens';
     }
 
     // checks location choice
