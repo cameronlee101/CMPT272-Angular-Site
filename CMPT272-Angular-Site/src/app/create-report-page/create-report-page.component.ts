@@ -29,7 +29,7 @@ export class CreateReportPageComponent {
     })
   }
 
-  onLocationSelect(event:any):void {
+  onLocationSelect():void {
     if (this.selectedLocation == 'None' || this.selectedLocation == 'New Location') {
       this.locationName = ''
       this.latitude = ''
@@ -110,19 +110,20 @@ export class CreateReportPageComponent {
     if (this.errorLabelText == '') {
       let newReport = new NuisanceReport(this.nrs, this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
         latitudeNum, longitudeNum, this.pictureLink, this.extraInfo) 
-      this.nrs.addReport(newReport)
-
-      // TODO: stores location data if new location, or increment reports if reused location
-      let matchingLocation = this.locationList.filter((item) => { return item.name == this.locationName; })
-      if (matchingLocation.length == 0) {
-        this.lds.addLocation(this.locationName, latitudeNum, longitudeNum)
-      }
-      else {
-        this.lds.incrementReportCount(matchingLocation[0])
-      }
-      
-
-      this.router.navigate(['/'])
+      this.nrs.addReport(newReport).subscribe(() => {
+        // Stores location data if new location, or increment reports count if reused location
+        let matchingLocation = this.locationList.filter((item) => { return item.name == this.locationName; })
+        if (matchingLocation.length == 0) {
+          this.lds.addLocation(this.locationName, latitudeNum, longitudeNum).subscribe(() => {
+            this.router.navigate(['/'])
+          })
+        }
+        else {
+          this.lds.incrementReportCount(matchingLocation[0]).subscribe(() => {
+            this.router.navigate(['/'])
+          })
+        } 
+      })
     }
   }
 }
