@@ -35,9 +35,8 @@ export class ModifyReportPageComponent {
 
   onDelete() {
     if (confirm('Are you sure you want to delete the report for ' + this.report!.baddieName + '?')) {
-      // TODO: delete
-      this.router.navigate(['/'])
+      this.nrs.deleteReport(this.report!)
+      this.router.navigate(['/']) // TODO: make sure location report count is decremented before switching back
     }
   }
-
 }

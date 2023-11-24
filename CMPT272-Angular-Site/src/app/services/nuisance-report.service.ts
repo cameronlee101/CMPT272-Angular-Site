@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SERVER_COLLECTION_URL } from 'app/constants';
 import { Observable, catchError, map, of, throwError } from 'rxjs';
+import { LocationData, LocationDataService } from './location-data.service';
 
 export enum Status {
   Open = 'Open',
@@ -66,7 +67,7 @@ export class NuisanceReportService {
     }
   };
 
-  constructor(private http:HttpClient) { 
+  constructor(private http:HttpClient, private lds:LocationDataService) { 
     // GET next ID from server and store it in this service
     this.http.get<IDTracker>(SERVER_COLLECTION_URL + '/IDTracker/documents/nextID')
       .pipe(catchError(this.handleError))
@@ -100,7 +101,6 @@ export class NuisanceReportService {
   // GET list of nuisance reports from server
   // NOTE: calling function will need to .subscribe() to get value
   getReportList():Observable<NuisanceReport[]> {
-    
     return this.http.get<ReportResponse[]>(SERVER_COLLECTION_URL + '/reports/documents')
       .pipe(catchError(this.handleError))
       .pipe(map((response:ReportResponse[]) => {
@@ -121,12 +121,37 @@ export class NuisanceReportService {
       }))
   }
 
+  // PUTs to server the report given the reportID
   modifyReport(reportID:number, body:NuisanceReport) {
-    // TODO: PUT to server
+    let putBody = {key: reportID, data: body}
+    this.http.put(SERVER_COLLECTION_URL + 'reports/documents/' + reportID + '/', putBody)
+      .pipe(catchError(this.handleError))
+      .subscribe()
   }
 
-  deleteReport(reportID:number) {
-    // TODO: DELETE report from server and decrement location report count
+  // DELETE report from server given the reportID
+  deleteReport(report:NuisanceReport) {
+    // deletes the report from the server 
+    this.http.delete(SERVER_COLLECTION_URL + 'reports/documents/' + report.ID + '/')
+      .pipe(catchError(this.handleError))
+      .subscribe()
+
+    // decrements the report count for the location that the report was in
+    this.lds.getLocationList().subscribe((locationList:LocationData[]) => {
+      locationList = locationList.filter((location) => { return location.name == report.locationName; })
+      if (locationList.length != 1) {
+        console.error('Duplicate or no locations found in location list when filtering by a nuisance report\'s location, check NuisanceReportService.deleteReport()')
+      }
+      else {
+        let decr_location = locationList.at(0)
+        if (decr_location != undefined) {
+          this.lds.decrementReportCount(decr_location)
+        }
+        else {
+          console.error('Error getting location object to decrement report count for, check NuisanceReportService.deleteReport()')
+        }
+      }
+    })
   }
   
   // Adapted from https://angular.io/guide/http-handle-request-errors
