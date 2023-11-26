@@ -128,6 +128,7 @@ export class NuisanceReportService {
   // DELETE report from server given the reportID and then decrement the report count of the location that that nuisance report was
   deleteReport(report: NuisanceReport): Observable<any> {
     return this.http.delete(SERVER_COLLECTION_URL + 'reports/documents/' + report.ID + '/')
+      .pipe(catchError(this.handleError))
       .pipe(
         switchMap(() => this.lds.getLocationList()),
         map((locationList: LocationData[]) => {
@@ -138,10 +139,10 @@ export class NuisanceReportService {
           } else {
             let decrLocation = filteredLocations[0];
   
-            if (decrLocation !== undefined) {
-              this.lds.decrementReportCount(decrLocation).subscribe();
-            } else {
+            if (decrLocation == undefined) {
               console.error('Error getting location object to decrement report count for, check NuisanceReportService.deleteReport()');
+            } else {
+              this.lds.decrementReportCount(decrLocation).subscribe();
             }
           }
         })
