@@ -29,7 +29,7 @@ export class CreateReportPageComponent {
     })
   }
 
-  onLocationSelect(event:any):void {
+  onLocationSelect():void {
     if (this.selectedLocation == 'None' || this.selectedLocation == 'New Location') {
       this.locationName = ''
       this.latitude = ''
@@ -76,10 +76,13 @@ export class CreateReportPageComponent {
       this.errorLabelText = 'Error: \'Location Name\' cannot be empty'
     }
     else if (this.locationName == 'None' || this.locationName == 'New') {
-      this.errorLabelText = 'Error: \'Location Name\' cannot be \'New\' or \'None\''
+      this.errorLabelText = 'Error: \'Location Name\' cannot be \'None\''
     }
     else if (this.selectedLocation == 'New Location' && this.locationList.find(curLocation => {return curLocation.name == this.locationName}) != undefined) {
       this.errorLabelText = 'Error: Location with specified name already exists'
+    }
+    else if (!/^[a-zA-Z0-9_\-]+$/.test(this.locationName)) {
+      this.errorLabelText = 'Error: \'Location Name\' can only contain letters, numbers, underscores, or hyphens';
     }
 
     // checks location choice
@@ -110,19 +113,20 @@ export class CreateReportPageComponent {
     if (this.errorLabelText == '') {
       let newReport = new NuisanceReport(this.nrs, this.witnessName, this.witnessPhoneNumber, this.baddieName, this.locationName,
         latitudeNum, longitudeNum, this.pictureLink, this.extraInfo) 
-      this.nrs.addReport(newReport)
-
-      // TODO: stores location data if new location, or increment reports if reused location
-      let matchingLocation = this.locationList.filter((item) => { return item.name == this.locationName; })
-      if (matchingLocation.length == 0) {
-        this.lds.addLocation(this.locationName, latitudeNum, longitudeNum)
-      }
-      else {
-        this.lds.incrementReportCount(matchingLocation[0])
-      }
-      
-
-      this.router.navigate(['/'])
+      this.nrs.addReport(newReport).subscribe(() => {
+        // Stores location data if new location, or increment reports count if reused location
+        let matchingLocation = this.locationList.filter((item) => { return item.name == this.locationName; })
+        if (matchingLocation.length == 0) {
+          this.lds.addLocation(this.locationName, latitudeNum, longitudeNum).subscribe(() => {
+            this.router.navigate(['/'])
+          })
+        }
+        else {
+          this.lds.incrementReportCount(matchingLocation[0]).subscribe(() => {
+            this.router.navigate(['/'])
+          })
+        } 
+      })
     }
   }
 }

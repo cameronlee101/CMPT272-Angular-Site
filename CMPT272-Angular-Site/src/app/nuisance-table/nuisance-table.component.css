@@ -6,6 +6,9 @@ table {
     text-align: center;
     width: 75vw;
 }
+th {
+    user-select: none;
+}
 td {
     vertical-align: middle;
     height: 50px;

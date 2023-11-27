@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NuisanceReport, NuisanceReportService, Status } from 'app/services/nuisance-report.service';
 
@@ -13,11 +13,13 @@ export class ModifyReportPageComponent {
   reportID:number
   report:NuisanceReport|undefined
   form:FormGroup
-  selectedStatus: string = Object.values(Status)[0]; // Assuming Status is an enum
+  selectedStatus:string = Object.values(Status)[0]
   
   constructor(private activatedRoute: ActivatedRoute, private nrs:NuisanceReportService, private router:Router) {
     this.reportID = activatedRoute.snapshot.params['ID']
-    nrs.getReport(this.reportID).subscribe((report:NuisanceReport) => { this.report = report })
+    nrs.getReport(this.reportID).subscribe((report:NuisanceReport) => { 
+      this.report = report 
+    })
 
     let formControls = {
       status: new FormControl([
@@ -29,14 +31,17 @@ export class ModifyReportPageComponent {
   } 
  
   onSubmit(values:{status: Status}) {
-    console.log(values) 
-    // TODO: modify report
+    this.report!.status = values.status
+    this.nrs.modifyReport(this.reportID, this.report!).subscribe(() => {
+      this.router.navigate(['/'])
+    })
   }
 
   onDelete() {
     if (confirm('Are you sure you want to delete the report for ' + this.report!.baddieName + '?')) {
-      this.nrs.deleteReport(this.report!)
-      this.router.navigate(['/']) // TODO: make sure location report count is decremented before switching back
+      this.nrs.deleteReport(this.report!).subscribe(() => {
+        this.router.navigate(['/'])
+      })
     }
   }
 }
