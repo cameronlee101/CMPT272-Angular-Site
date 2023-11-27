@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { LocationDataService, LocationData } from 'app/services/location-data.service';
 import * as L from 'leaflet';
 
@@ -27,15 +27,22 @@ Marker.prototype.options.icon = iconDefault;
 export class MapComponent implements AfterViewInit {
   private map:any;
   locationList:LocationData[] = []
+  @Output() clickCoords = new EventEmitter()
+  coords: {
+    lat:number
+    lon:number
+  }
 
-  constructor(private lds:LocationDataService) {}
+  constructor(private lds:LocationDataService) {
+    this.coords = {lat: 49.210002318495455, lon: -122.90813212632467}
+  }
 
   createMap():void {
     this.map = L.map('map', {
-      center: [ 49.210002318495455, -122.90813212632467 ],
+      center: [ this.coords.lat, this.coords.lon ],
       zoom: 10
     });
-
+    
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       minZoom: 3,
@@ -43,6 +50,8 @@ export class MapComponent implements AfterViewInit {
     });
 
     tiles.addTo(this.map);
+
+    this.map.on('click', this.mapClick)
   }
 
   createNuisanceMarkers():void {
@@ -59,5 +68,12 @@ export class MapComponent implements AfterViewInit {
       this.locationList = list.filter((location) => { return location.reports > 0; })
       this.createNuisanceMarkers()
     })
+  }
+
+  mapClick(event: { latlng: { lat: number; lng: number; }; }) {
+    alert("Lat, Lon: " + event.latlng.lat + ", " + event.latlng.lng)
+    this.coords.lat = event.latlng.lat
+    this.coords.lon = event.latlng.lng
+    this.clickCoords.emit(this.coords)
   }
 }
