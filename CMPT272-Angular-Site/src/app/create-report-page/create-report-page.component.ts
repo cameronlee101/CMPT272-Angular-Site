@@ -30,7 +30,7 @@ export class CreateReportPageComponent {
   }
 
   onLocationSelect():void {
-    if (this.selectedLocation == 'None' || this.selectedLocation == 'New Location') {
+    if (this.selectedLocation == 'New Location') {
       this.locationName = ''
       this.latitude = ''
       this.longitude = ''
@@ -40,15 +40,23 @@ export class CreateReportPageComponent {
       this.latitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.latitude.toString()
       this.longitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.longitude.toString()
     }
+    // TODO: move marker when location selected
   }
 
-  // Checks that all inputs are valid
-  onSubmit():void {
+  onMapClick(coords:L.LatLng) {
+    this.selectedLocation = 'New Location'
+    this.locationName = '' 
+    this.latitude = coords.lat.toString()
+    this.longitude = coords.lng.toString()
+  }
+
+  // Checks that all inputs are valid 
+  onSubmit():void { 
     // Checking fields in reverse order for usability
     this.errorLabelText = ''
 
     // checks longtiude
-    let longitudeNum = Number(this.longitude)
+    let longitudeNum = Number(this.longitude) 
     if (this.longitude == '') {
       this.errorLabelText = 'Error: \'Longitude\' cannot be empty'
     }
@@ -76,18 +84,13 @@ export class CreateReportPageComponent {
       this.errorLabelText = 'Error: \'Location Name\' cannot be empty'
     }
     else if (this.locationName == 'None' || this.locationName == 'New') {
-      this.errorLabelText = 'Error: \'Location Name\' cannot be \'None\''
+      this.errorLabelText = 'Error: \'Location Name\' cannot be \'None\'' 
     }
     else if (this.selectedLocation == 'New Location' && this.locationList.find(curLocation => {return curLocation.name == this.locationName}) != undefined) {
       this.errorLabelText = 'Error: Location with specified name already exists'
     }
     else if (!/^[a-zA-Z0-9_\-]+$/.test(this.locationName)) {
       this.errorLabelText = 'Error: \'Location Name\' can only contain letters, numbers, underscores, or hyphens';
-    }
-
-    // checks location choice
-    if (this.selectedLocation == 'None') {
-      this.errorLabelText = 'Error: Must choose option in \'Select Location\''
     }
 
     // checks baddie's name

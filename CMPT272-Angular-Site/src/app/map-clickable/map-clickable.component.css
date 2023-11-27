@@ -1,0 +1,7 @@
+#map {
+    position: relative;
+    margin: 30px;
+    border: 2px solid black;
+    width: 80vw;
+    height: 60vh;
+}

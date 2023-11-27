@@ -12,6 +12,7 @@ import { MoreInfoBoxComponent } from './more-info-box/more-info-box.component';
 import { HttpClientModule } from '@angular/common/http';
 import { LoginPageComponent } from './login-page/login-page.component';
 import { ModifyReportPageComponent } from './modify-report-page/modify-report-page.component';
+import { MapClickableComponent } from './map-clickable/map-clickable.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ModifyReportPageComponent } from './modify-report-page/modify-report-pa
     MoreInfoBoxComponent,
     LoginPageComponent,
     ModifyReportPageComponent,
+    MapClickableComponent,
   ],
   imports: [
     BrowserModule,

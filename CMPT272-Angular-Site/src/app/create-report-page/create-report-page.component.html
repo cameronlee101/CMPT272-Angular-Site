@@ -5,6 +5,8 @@
         </h1>
     </header>
     <main>
+        <app-map-clickable (clickCoords)="onMapClick($event)"></app-map-clickable>
+        <p>Click on the above map to select the location of this nuisance!</p>
         <form>
             <table class="table table-hover table-striped table-light">
                 <tbody>
@@ -29,7 +31,6 @@
                                 [(ngModel)]="selectedLocation"
                                 (change)="onLocationSelect()" 
                             >
-                                <option value="None">None</option>
                                 <option value="New Location">New Location</option>
                                 <option 
                                     *ngFor="let location of locationList"
@@ -42,15 +43,15 @@
                     </tr>
                     <tr>
                         <td>Location Name<br/>(Only letters, numbers, <br/>underscores, or hyphens)</td>
-                        <td><input [(ngModel)]="locationName" name="locationName" [disabled]="selectedLocation !== 'New Location'"/></td>
+                        <td><input [(ngModel)]="locationName" name="locationName"/></td>
                     </tr>
                     <tr>
                         <td>Latitude</td>
-                        <td><input [(ngModel)]="latitude" name="latitutde" [disabled]="selectedLocation !== 'New Location'"/></td>
+                        <td><input [(ngModel)]="latitude" name="latitutde"/></td>
                     </tr>
                     <tr>
                         <td>Longitude</td>
-                        <td><input [(ngModel)]="longitude" name="longitude" [disabled]="selectedLocation !== 'New Location'"/></td>
+                        <td><input [(ngModel)]="longitude" name="longitude"/></td>
                     </tr>
                     <tr>
                         <td>Picture Link &#40;Optional&#41;</td>

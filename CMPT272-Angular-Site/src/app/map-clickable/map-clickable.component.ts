@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { LocationDataService, LocationData } from 'app/services/location-data.service';
 import * as L from 'leaflet';
 
@@ -20,26 +20,30 @@ const iconDefault = icon({
 Marker.prototype.options.icon = iconDefault;
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  selector: 'app-map-clickable',
+  templateUrl: './map-clickable.component.html',
+  styleUrls: ['./map-clickable.component.css']
 })
-export class MapComponent implements AfterViewInit {
-  private map:any;
-  locationList:LocationData[] = []
+export class MapClickableComponent implements AfterViewInit {
+  private map:any
+  locationList: LocationData[] = []
   initial_coords = {
     lat: 49.210002318495455,
     lon: -122.90813212632467,
   }
+  @Output() clickCoords = new EventEmitter()
+  marker: Marker;
 
-  constructor(private lds:LocationDataService) {}
+  constructor(private lds: LocationDataService, private cdr: ChangeDetectorRef) {
+    this.marker = L.marker([this.initial_coords.lat, this.initial_coords.lon]);
+  }
 
-  createMap():void {
+  createMap(): void {
     this.map = L.map('map', {
-      center: [ this.initial_coords.lat, this.initial_coords.lon ],
+      center: [this.initial_coords.lat, this.initial_coords.lon],
       zoom: 10
     });
-    
+
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       minZoom: 3,
@@ -49,19 +53,16 @@ export class MapComponent implements AfterViewInit {
     tiles.addTo(this.map);
   }
 
-  createNuisanceMarkers():void {
-    for (let location of this.locationList) {
-      let marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
-      marker.bindPopup(`<b>${location.name}</b><br>${location.reports} nuisance reports`)
-    }
-  }
-
-  ngAfterViewInit():void {
+  ngAfterViewInit(): void {
     this.createMap()
+    this.map.on("click", (e: { latlng: { lat: number; lng: number; }; }) => {
+      this.marker.setLatLng(L.latLng(e.latlng.lat, e.latlng.lng));
 
-    this.lds.getLocationList().subscribe((list:LocationData[]) => {
-      this.locationList = list.filter((location) => { return location.reports > 0; })
-      this.createNuisanceMarkers()
-    })
+      if (!this.map.hasLayer(this.marker)) {
+        this.marker.addTo(this.map);
+      }
+
+      this.clickCoords.emit(this.marker.getLatLng())
+    });
   }
 }
