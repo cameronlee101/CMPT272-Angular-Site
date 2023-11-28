@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MapClickableComponent } from 'app/map-clickable/map-clickable.component';
 import { LocationDataService, LocationData } from 'app/services/location-data.service';
 import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-report.service';
 
@@ -9,10 +10,14 @@ import { NuisanceReportService, NuisanceReport } from 'app/services/nuisance-rep
   styleUrl: './create-report-page.component.css'
 })
 export class CreateReportPageComponent {
+  @ViewChild(MapClickableComponent)
+  clickableMap!: MapClickableComponent;
+  markerCoords = { lat: 0, lng: 0 }
+
   witnessName:string = '';
   witnessPhoneNumber:string = '';
   baddieName:string = '';
-  selectedLocation:string = 'None';
+  selectedLocation: string = 'New Location'
   locationName:string = '';
   latitude:string = '';
   longitude:string = '';
@@ -29,6 +34,19 @@ export class CreateReportPageComponent {
     })
   }
 
+  onMapClick(coords:L.LatLng) {
+    this.selectedLocation = 'New Location'
+    this.locationName = '' 
+    this.latitude = coords.lat.toString()
+    this.longitude = coords.lng.toString()
+    this.markerCoords = { lat: coords.lat, lng: coords.lng }
+  }
+
+  onCoordChange() {
+    this.markerCoords = { lat: Number(this.latitude), lng: Number(this.longitude) }
+    this.clickableMap.onCoordChange(this.markerCoords)
+  }
+
   onLocationSelect():void {
     if (this.selectedLocation == 'New Location') {
       this.locationName = ''
@@ -39,15 +57,8 @@ export class CreateReportPageComponent {
       this.locationName = this.selectedLocation
       this.latitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.latitude.toString()
       this.longitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.longitude.toString()
+      this.onCoordChange()
     }
-    // TODO: move marker when location selected
-  }
-
-  onMapClick(coords:L.LatLng) {
-    this.selectedLocation = 'New Location'
-    this.locationName = '' 
-    this.latitude = coords.lat.toString()
-    this.longitude = coords.lng.toString()
   }
 
   // Checks that all inputs are valid 

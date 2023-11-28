@@ -5,52 +5,62 @@
         </h1>
     </header>
     <main>
-        <main>
-            <form
-                [formGroup]="form"
-                (ngSubmit)="onSubmit(form.value)"
-            >   
-                <div>
-                    <label for="status">Status &nbsp;</label>
-                    <select
-                        name="status"
-                        id="status"
-                        formControlName="status"
-                        [(ngModel)]="selectedStatus"
+        <app-more-info-box
+            [report] = 'report'
+            *ngIf="showingMoreInfo"
+            (close)="closeMoreInfo()"
+        ></app-more-info-box>
+        <form
+            [formGroup]="form"
+            (ngSubmit)="onSubmit(form.value)"
+        >   
+            <div>
+                <label for="status">Status &nbsp;</label>
+                <select
+                    name="status"
+                    id="status"
+                    formControlName="status"
+                    [(ngModel)]="selectedStatus"
+                >
+                    <option 
+                        *ngFor="let enum of StatusEnum | keyvalue"
+                        value="{{ enum.value }}"
                     >
-                        <option 
-                            *ngFor="let enum of StatusEnum | keyvalue"
-                            value="{{ enum.value }}"
-                        >
-                            {{ enum.value }}
-                        </option>
-                    </select>
-                </div>
-                
-                <div>
-                    <button 
-                        type="button" 
-                        class="btn btn-outline-secondary"
-                        routerLink="/"
-                    >
-                        BACK TO HOME
-                    </button>
-                    <button 
-                        class="btn btn-outline-primary"
-                        [disabled]="!form.valid"
-                    >
-                        SUBMIT
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-outline-danger"
-                        (click)="onDelete()"
-                    >
-                        DELETE REPORT
-                    </button>
-                </div>
-            </form>
-        </main>
+                        {{ enum.value }}
+                    </option>
+                </select>
+            </div>
+            
+            <div>
+                <button 
+                    type="button" 
+                    class="btn btn-outline-secondary"
+                    routerLink="/"
+                >
+                    BACK TO HOME
+                </button>
+                <button 
+                    class="btn btn-outline-primary"
+                    [disabled]="!form.valid"
+                >
+                    SUBMIT
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-outline-info"
+                    (click)="showMoreInfo()"
+                >
+                    MORE INFO
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    (click)="onDelete()"
+                >
+                    DELETE REPORT
+                </button>
+            </div>
+        </form>
     </main>
 </body>
 

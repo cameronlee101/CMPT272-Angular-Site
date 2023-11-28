@@ -5,8 +5,8 @@
         </h1>
     </header>
     <main>
-        <app-map-clickable (clickCoords)="onMapClick($event)"></app-map-clickable>
-        <p>Click on the above map to select the location of this nuisance!</p>
+        <app-map-clickable (clickCoords)="onMapClick($event)" [markerCoords]="markerCoords"></app-map-clickable>
+        <p id="mapDescription">Click on the map above to select the location of this nuisance!</p>
         <form>
             <table class="table table-hover table-striped table-light">
                 <tbody>
@@ -47,11 +47,23 @@
                     </tr>
                     <tr>
                         <td>Latitude</td>
-                        <td><input [(ngModel)]="latitude" name="latitutde"/></td>
+                        <td>
+                            <input 
+                                [(ngModel)]="latitude" 
+                                name="latitutde"
+                                (change)="onCoordChange()"
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <td>Longitude</td>
-                        <td><input [(ngModel)]="longitude" name="longitude"/></td>
+                        <td>
+                            <input 
+                                [(ngModel)]="longitude" 
+                                name="longitude"
+                                (change)="onCoordChange()"
+                            />
+                        </td>
                     </tr>
                     <tr>
                         <td>Picture Link &#40;Optional&#41;</td>

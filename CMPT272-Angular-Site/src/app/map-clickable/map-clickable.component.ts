@@ -1,5 +1,4 @@
-import { Component, AfterViewInit, Output, EventEmitter, ChangeDetectorRef } from '@angular/core';
-import { LocationDataService, LocationData } from 'app/services/location-data.service';
+import { Component, AfterViewInit, Output, EventEmitter, ChangeDetectorRef, Input, OnInit } from '@angular/core';
 import * as L from 'leaflet';
 
 // Need this stuff to make markers work
@@ -24,23 +23,23 @@ Marker.prototype.options.icon = iconDefault;
   templateUrl: './map-clickable.component.html',
   styleUrls: ['./map-clickable.component.css']
 })
-export class MapClickableComponent implements AfterViewInit {
+export class MapClickableComponent implements AfterViewInit, OnInit {
   private map:any
-  locationList: LocationData[] = []
   initial_coords = {
     lat: 49.210002318495455,
-    lon: -122.90813212632467,
+    lng: -122.90813212632467,
   }
+  @Input() markerCoords = this.initial_coords
   @Output() clickCoords = new EventEmitter()
   marker: Marker;
 
-  constructor(private lds: LocationDataService, private cdr: ChangeDetectorRef) {
-    this.marker = L.marker([this.initial_coords.lat, this.initial_coords.lon]);
+  constructor(private cdr: ChangeDetectorRef) {
+    this.marker = L.marker([this.initial_coords.lat, this.initial_coords.lng]);
   }
 
   createMap(): void {
     this.map = L.map('map', {
-      center: [this.initial_coords.lat, this.initial_coords.lon],
+      center: [this.initial_coords.lat, this.initial_coords.lng],
       zoom: 10
     });
 
@@ -53,16 +52,26 @@ export class MapClickableComponent implements AfterViewInit {
     tiles.addTo(this.map);
   }
 
+  moveMarker(lat:number, lng: number) {
+    this.marker.setLatLng(L.latLng(lat, lng));
+
+    if (!this.map.hasLayer(this.marker)) {
+      this.marker.addTo(this.map);
+    }
+  }
+
   ngAfterViewInit(): void {
     this.createMap()
     this.map.on("click", (e: { latlng: { lat: number; lng: number; }; }) => {
-      this.marker.setLatLng(L.latLng(e.latlng.lat, e.latlng.lng));
-
-      if (!this.map.hasLayer(this.marker)) {
-        this.marker.addTo(this.map);
-      }
-
+      this.moveMarker(e.latlng.lat, e.latlng.lng)
       this.clickCoords.emit(this.marker.getLatLng())
     });
+  }
+
+  ngOnInit(): void {}
+
+  onCoordChange(e: { lat:number, lng:number }) {
+    this.moveMarker(e.lat, e.lng)
+    this.ngOnInit()
   }
 }

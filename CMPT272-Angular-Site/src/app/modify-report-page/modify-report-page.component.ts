@@ -9,9 +9,11 @@ import { NuisanceReport, NuisanceReportService, Status } from 'app/services/nuis
   styleUrl: './modify-report-page.component.css'
 })
 export class ModifyReportPageComponent {
+  showingMoreInfo:boolean = false
+
   StatusEnum = Status
   reportID:number
-  report:NuisanceReport|undefined
+  report!:NuisanceReport
   form:FormGroup
   selectedStatus:string = Object.values(Status)[0]
   
@@ -29,6 +31,14 @@ export class ModifyReportPageComponent {
     }
     this.form = new FormGroup(formControls)
   } 
+  
+  showMoreInfo() {
+    this.showingMoreInfo = true
+  }
+ 
+  closeMoreInfo() {
+    this.showingMoreInfo = false
+  }
  
   onSubmit(values:{status: Status}) {
     this.report!.status = values.status
