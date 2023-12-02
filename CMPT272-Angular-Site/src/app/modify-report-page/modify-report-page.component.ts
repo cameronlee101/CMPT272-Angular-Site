@@ -9,7 +9,7 @@ import { NuisanceReport, NuisanceReportService, Status } from 'app/services/nuis
   styleUrl: './modify-report-page.component.css'
 })
 export class ModifyReportPageComponent {
-  showingMoreInfo:boolean = false
+  showingMoreInfo:boolean = true
 
   StatusEnum = Status
   reportID:number

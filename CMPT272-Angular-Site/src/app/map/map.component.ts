@@ -52,7 +52,12 @@ export class MapComponent implements AfterViewInit {
   createNuisanceMarkers():void {
     for (let location of this.locationList) {
       let marker = L.marker([location.latitude, location.longitude]).addTo(this.map);
-      marker.bindPopup(`<b>${location.name}</b><br>${location.reports} nuisance reports`)
+      if (location.reports == 1) {
+        marker.bindPopup(`<b>${location.name}</b><br>${location.reports} nuisance report`)
+      }
+      else {
+        marker.bindPopup(`<b>${location.name}</b><br>${location.reports} nuisance reports`)
+      }
     }
   }
 

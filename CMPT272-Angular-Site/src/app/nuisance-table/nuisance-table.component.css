@@ -1,5 +1,11 @@
 body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #FAF9F6;
+    text-align: center;
+}
+
+p {
+    margin-bottom: 4px;
 }
 
 table {

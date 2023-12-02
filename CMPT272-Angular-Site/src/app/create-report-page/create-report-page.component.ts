@@ -42,9 +42,11 @@ export class CreateReportPageComponent {
     this.markerCoords = { lat: coords.lat, lng: coords.lng }
   }
 
-  onCoordChange() {
-    this.markerCoords = { lat: Number(this.latitude), lng: Number(this.longitude) }
-    this.clickableMap.onCoordChange(this.markerCoords)
+  changeCoords() {
+    if (!(Number.isNaN(Number(this.latitude)) || Number.isNaN(Number(this.latitude)))) {
+      this.markerCoords = { lat: Number(this.latitude), lng: Number(this.longitude) }
+      this.clickableMap.onCoordChange(this.markerCoords)
+    }
   }
 
   onLocationSelect():void {
@@ -57,8 +59,14 @@ export class CreateReportPageComponent {
       this.locationName = this.selectedLocation
       this.latitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.latitude.toString()
       this.longitude = this.locationList.find(curLocation => {return curLocation.name == this.selectedLocation})!.longitude.toString()
-      this.onCoordChange()
+      this.changeCoords()
     }
+  }
+
+  onCoordEdit() {
+    this.selectedLocation = 'New Location'
+    this.locationName = ''
+    this.changeCoords()
   }
 
   // Checks that all inputs are valid 
