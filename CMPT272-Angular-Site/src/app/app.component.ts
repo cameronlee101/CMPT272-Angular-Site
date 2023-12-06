@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'CMPT272-Angular-Site';
+
+  onActivate(event:any) {
+    window.scroll({ 
+      top: 0, 
+      left: 0, 
+    });
+  }
 }
+
